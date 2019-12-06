@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700');
+@import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
+@import url(base.css);
+
+header{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 86px;
+    z-index: 997;
+    transition: all 0.5s;
+    background-color: #0f1d2d;
+}
+header>h1{
+    width: 159px;
+    height: 100%;
+    position: absolute;
+    left: 36px;
+    top: 0;
+    background-image: url('../images/logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 159px 39px;
+    font-size: 0;
+}
+header>h1>a{
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+
+
+.container{
+    text-align: center;
+    height: 100%;
+    padding-top: 86px;
+}
+.container .button{
+    margin-top: 15px;
+    font-size:20px;
+    color: #ffffff;
+    background-color: #33cccc;
+    display: inline-block;
+    padding: 15px 25px;
+    border-radius: 25px;
+}
+
+#app{height: 100%;overflow: hidden}
+.section__container{height:100%;}
+.section__container>div{display: inline-block;height: 100%;vertical-align: top;position:relative}
+.section__container .section__container-left {
+    z-index: 10;
+    width: 60%;
+    background-color: rgb(241, 241, 241);
+    background-image: url("../images/texture_bg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-blend-mode: multiply;
+}
+.section__container .section__container-left .section__image-area{width:500px;position:absolute;top:50%;left:50%;transform: translate(-50%,-50%);}
+.section__container .section__container-left .crop__btn{
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    width: 100px;
+    height: 40px;
+    font-size: 16px;
+    border: 0;
+    color: #fff;
+    background: #33cccc;}
+.section__container .section__container-right{width: 40%;}
+.section__container .section__container-right .upload__btn{position:absolute;top:50%;left:50%;transform: translate(-50%,-50%);}
+.section__container .section__container-right .upload__btn input{display: none}
+.section__container .section__container-right .upload__btn label{font-weight:500;border-radius: 5px;display: inline-block;text-align: center;padding: 14px 32px;background-color: #33cccc;color: #fff}
+
+.section__container .section__container-right.next1 .section__slide-wrap{
+    left:-100%
+}
+.section__container .section__container-right.next1 .progressbar .progressbar-inner{
+    width: 50%;
+}
+.section__container .section__container-right.next1 .progressbar .progressbar-inner::before{
+    content:"50%";
+    color: #ffffff;
+    float:right;
+}
+.section__container .section__container-right.next2 .section__slide-wrap{
+    left:-200%
+}
+.section__container .section__container-right.next2 .progressbar .progressbar-inner{
+    width: 75%;
+}
+.section__container .section__container-right.next2 .progressbar .progressbar-inner::before{
+    content:"75%";
+    color: #ffffff;
+    float:right;
+}
+
+
+.progressbar-wrap{
+    width: 80%;
+    margin: 0 auto;
+    height: 77px;
+    position: relative;
+    border-bottom: 2px solid #eaeaea;
+    padding: 0 65px;
+}
+
+.progressbar-wrap .progressbar{
+    width: 100%;
+    height: 26px;
+    padding: 2px;
+    border: 2px solid #33cccc;
+    border-radius: 5px;
+    position: relative;
+    top: 26px;
+}
+.progressbar-wrap .progressbar .progressbar-inner{
+    position:relative;
+    width: 0;
+    height: 100%;
+    transition: 0.4s;
+    z-index: 1;
+    background-image: linear-gradient(to right, #e8f9f9, #57d4d5);
+    border-radius: 4px;
+}
+.progressbar-wrap .progressbar .progressbar-inner::before{
+    content:"0%";
+    display: inline-block;
+    font-size: 12px;
+    line-height: 20px;
+    padding: 0 6px;
+    font-weight: 500;
+    color: #33cccc;
+}
+
+
+
+.progressbar-wrap button{
+    font-size: 20px;
+    position: absolute;
+    z-index: 2;
+    line-height: 34px;
+    width: 36px;
+    height: 36px;
+    text-align: center;
+    top: 50%;
+    margin-top: -18px;
+    border: 2px solid #cccccc;
+    color: #cccccc;
+    border-radius: 50%;
+    cursor: not-allowed;
+}
+.progressbar-wrap button.left-btn{
+    left:0;
+}
+.progressbar-wrap button.right-btn{
+    right:0;
+}
+.progressbar-wrap button.on{
+    border:2px solid #33cccc;
+    color: #33cccc;
+    cursor: pointer;
+}
+
+/* 배경 컬러 */
+.section__background {
+    position:absolute;left:0;bottom:0;
+    width: 250px;
+    background-color: #33cccc;
+    color: #fff;
+    text-align: center;
+    border-radius: 0 25px 0 0;
+}
+.section__background label {
+    line-height: normal;
+    font-size: 20px;
+    font-weight: 600;
+    display: block;
+    cursor: pointer;
+    padding: 13px 0;
+}
+
+.section__background input {
+    display: none;
+}
+
+.section__slide-wrap{
+    position:relative;
+    width: 400%;
+    top:0;
+    left:0;
+    height: calc(100% - 77px);
+    transition: all .4s;
+}
+
+.section__slide-wrap .section__slide{
+    position: relative;
+    display: inline-block;
+    width: 25%;
+    height: 100%;
+    vertical-align: top;
+}
+.section__slide-wrap .section__slide .section_title-box{
+    width: 80%;
+    margin: 15px auto 0;
+}
+.section__slide-wrap .section__slide .section_title-box h1{
+    text-align: left;
+    font-weight: bold;
+    font-size: 33px;
+    line-height: 33px;
+    color: #0f1d2d;
+    margin-bottom: 16px;
+}
+.section__slide-wrap .section__slide .section_title-box p{
+    text-align: left;
+    font-size: 16px;
+    color: #212f3f;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+
+.section__tab{
+    width: 80%;
+    margin:15px auto 0;
+    font-size:0;
+}
+.section__tab .section__tab-title span{
+    width: 50%;
+    display: inline-block;
+    cursor: pointer;
+    padding: 7px 15px;
+    font-size: 20px;
+    text-align: center;
+    color: #5a5a5a;
+    border-bottom: 2px solid #33cccc;
+    background: #eaeaea;
+}
+.section__tab .section__tab-title span.on{
+    background-color: #33cccc;
+    color: #fff;
+}
+.section__tab .section__tab-step{
+    margin-top: -2px;
+    border:2px solid #33cccc;
+    overflow-y: auto;
+    max-height: 225px;
+    padding-bottom: 15px;
+    text-align: center;
+}
+.section__tab .section__tab-step ul li{
+    width: calc(32% - 14px);
+    text-align: center;
+    display: inline-block;
+    margin: 15px 7px 0 7px;
+}
+.section__tab .section__tab-step ul li button{
+    border: 1px solid #686767;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+    padding: 14px 15px;
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: 300;
+}
+.section__tab .section__tab-step ul li.active button{
+    border:1px solid #33cccc;
+    background-color: #33cccc;
+    color: #ffffff;
+}

@@ -60,7 +60,7 @@ header>h1>a{
     background-size: cover;
     background-blend-mode: multiply;
 }
-.section__container .section__container-left .section__image-area{width:500px;position:absolute;top:50%;left:50%;transform: translate(-50%,-50%);}
+.section__container .section__container-left .section__image-area{width:450px;position:absolute;top:50%;left:50%;transform: translate(-50%,-50%);}
 .section__container .section__container-left .crop__btn{
     cursor: pointer;
     position: absolute;
@@ -276,4 +276,71 @@ header>h1>a{
     border:1px solid #33cccc;
     background-color: #33cccc;
     color: #ffffff;
+}
+
+.section__swiper-wrap{
+    position:relative;
+}
+.swiper-button-prev{
+    left:20px;
+}
+.swiper-button-next{
+    right:20px;
+}
+.section__frame-list {
+    width: 80%;
+    margin: 25px auto;
+}
+.section__frame-list .swiper-slide{
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #efe7e7;
+    cursor: pointer;
+}
+.section__frame-list .swiper-slide span{display: block;width: 100%;padding-top: 100%;height: 0;background-repeat: no-repeat;background-position: center;}
+.section__frame-list .swiper-slide img{
+    transform: scale(3) translate(45%, 45%);
+}
+.frame-scale{
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+.frame{
+    width: auto;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translateZ(-250px) translate(-50%, -50%);
+    transform-style: preserve-3d;
+    transition: transform 1s;
+}
+.frame-image{
+    box-sizing: content-box;
+    min-width: 224px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    /* -webkit-backface-visibility: hidden; */
+    /* -webkit-transform: translate(-50%, -50%) translateZ(0) scale(1.0, 1.0); */
+}
+.frame__border{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid black;
+    box-sizing: border-box;
+    border-image-width: 35px;
+    border-image-repeat: stretch;
+    border-image-slice: 222;
+    background-size: cover;
+    background-position: center;
+    border-color: transparent;
+    border-image-repeat: round;
+    z-index: 999;
+    overflow: hidden;
 }

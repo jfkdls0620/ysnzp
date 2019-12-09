@@ -21,16 +21,24 @@
                         <vue-cropper
                                 :src="cropImg"
                                 :aspect-ratio = aspectRatio
-                                :fixedBox = true
+                                :viewMode = 1
+                                :autoCopArea = 1
                                 :cropBoxResizable = false
+                                :container-width = 200
+                                :container-height = 500
                                 class="vue-cropper"
-                                ref="cropper"
+                                ref="cropper2"
                                 alt="Source Image"
                                 />
                     </div>
                     <div v-if="cropImg2">
-                        <div class="frame-block">
-                            <img :src="cropImg2" alt="Cropped">
+                        <div class="frame-scale">
+                            <div class="frame">
+                                <div class="frame__border" v-if="frontSrc" v-bind:style="{ 'border-image-source': 'url(' + frontSrc + ')' }"></div>
+                                <div class="frame-image">
+                                    <img :src="cropImg2" alt="Cropped">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -80,8 +88,18 @@
                             <p>이미지 해상도를 고려하여,</p>
                             <p>가장 적합한 인쇄 사이즈를 추천드립니다.</p>
                         </div>
+                        <div class="section__swiper-wrap">
+                            <swiper :options="swiperOption" class="section__frame-list">
+                                <swiper-slide v-for="frame in frameList" :key="frame.src">
+                                    <img :src="getImgUrl(frame)" v-bind:alt="frame.name">
+                                </swiper-slide>
+                            </swiper>
+                            <div class="swiper-button-prev" slot="button-prev"></div>
+                            <div class="swiper-button-next" slot="button-next"></div>
+                        </div>
                     </div>
                     <div class="section__slide">
+
                     </div>
                 </div>
             </div>
@@ -90,13 +108,14 @@
 </template>
 <script>
     import VueCropper from 'vue-cropperjs';
+    import { swiper, swiperSlide } from 'vue-awesome-swiper'
     import 'cropperjs/dist/cropper.css';
+    // require styles
+    import 'swiper/dist/css/swiper.css'
 
     export default {
         name: 'SelectPicture',
-        components : {
-            VueCropper
-        },
+        components : {VueCropper, swiper, swiperSlide},
         data(){
             return{
                 url: null,
@@ -109,15 +128,25 @@
                 active_el: 0,
                 ratioWidth: 0,
                 ratioHeight: 0,
+                totalRatioSize : 0,
                 aspectRatio: 0,
+                frontSrc: null,
                 sizeList:[
                     { text: '5X7(inch)', dataWidth:'7', dataHeight:'5' },
                     { text: '6X8(inch)', dataWidth:'8', dataHeight:'6' },
                     { text: '8X10(inch)', dataWidth:'10', dataHeight:'8' }
                 ],
+                frameList:[],
+                swiperOption: {
+                    slidesPerView: 5,
+                    spaceBetween: 10,
+                    slidesPerColumn: 2,
+                }
             }
         },
-
+        mounted(){
+            this.getList();
+        },
         methods : {
             onFileChange(e){
                 const img = e.target.files[0];
@@ -130,9 +159,24 @@
                 this.percent = 50;
             },
             cropImage2(){
-                this.cropImg2 = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                this.cropImg2 = this.$refs.cropper2.getCroppedCanvas().toDataURL();
                 this.isCrop2 = false;
                 this.percent = 75;
+            },
+            getList(){
+              this.$http.get('http://localhost:3000/goods')
+                  .then((res)=>{
+                      //console.log('getList', res.data)
+                    this.frameList = res.data;
+                  });
+            },
+            getImgUrl(frame) {
+                try {
+                    const currentImageName = `${frame.src}`;
+                    return require('../assets/images/goods/' + currentImageName);
+                } catch{
+                    return require('../assets/images/logo.png');
+                }
             },
             fnLeftBtn(){
                 //if (this.percent === 75) this.percent = 50;
@@ -144,12 +188,19 @@
                 this.active_el = el;
                 this.isCrop = false;
                 this.isCrop2 = true;
-                this.aspectRatio = ratioWidth/ratioHeight;
+                this.aspectRatio = ratioWidth / ratioHeight;
+
                 let inchToMillimeters = 25.4;
                 ratioWidth = (ratioWidth * inchToMillimeters);
                 ratioHeight = (ratioHeight * inchToMillimeters);
-                console.log(ratioWidth,ratioHeight)
-            }
+
+                this.ratioWidth = ratioWidth;
+                this.ratioHeight = ratioHeight;
+
+            },
+            fnFrameChange(frame){
+                console.log(frame);
+            },
         },
         computed:{
             getPercentCls(){
@@ -164,6 +215,9 @@
                 }
                 return nextCls;
             },
+            swiper() {
+                return this.$refs.mySwiper.swiper
+            }
         }
     }
 

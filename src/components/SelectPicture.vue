@@ -3,11 +3,36 @@
         <section class="section__container">
             <div class="section__container-left" v-bind:style="{ backgroundColor: color }">
                 <div class="section__image-area" id="preview" >
-                    <img v-if="url" :src="url" alt="">
-<!--                    <div>-->
-<!--                        <button v-if="cropperImg" type="button" class="crop__btn">자르기</button>-->
-<!--                        <img :src="cropperImg" alt="" ref="img">-->
-<!--                    </div>-->
+                    <div v-if="url">
+                        <button type="button" class="crop__btn" @click.prevent="cropImage">자르기</button>
+                        <vue-cropper
+                                ref="cropper"
+                                :src="url"
+                                class="vue-cropper"
+                                :aspect-ratio = aspectRatio
+                                alt="Source Image"
+                        />
+                    </div>
+                    <div v-if="isCrop">
+                        <img :src="cropImg" alt="Cropped Image">
+                    </div>
+                    <div v-if="isCrop2">
+                        <button type="button" class="crop__btn" @click.prevent="cropImage2">확인</button>
+                        <vue-cropper
+                                :src="cropImg"
+                                :aspect-ratio = aspectRatio
+                                :fixedBox = true
+                                :cropBoxResizable = false
+                                class="vue-cropper"
+                                ref="cropper"
+                                alt="Source Image"
+                                />
+                    </div>
+                    <div v-if="cropImg2">
+                        <div class="frame-block">
+                            <img :src="cropImg2" alt="Cropped">
+                        </div>
+                    </div>
                 </div>
                 <div class="section__background">
                     <input type="color" id="background__color" v-model="color">
@@ -64,17 +89,19 @@
     </div>
 </template>
 <script>
-    import Cropper from 'cropperjs';
+    import VueCropper from 'vue-cropperjs';
     import 'cropperjs/dist/cropper.css';
 
     export default {
         name: 'SelectPicture',
+        components : {
+            VueCropper
+        },
         data(){
             return{
                 url: null,
-                cropperImg: '',
-                cropper: '',
-                imgName: '',
+                cropImg: null,
+                cropImg2: null,
                 isCrop: false,
                 isCrop2: false,
                 color : '#ffffff',
@@ -82,6 +109,7 @@
                 active_el: 0,
                 ratioWidth: 0,
                 ratioHeight: 0,
+                aspectRatio: 0,
                 sizeList:[
                     { text: '5X7(inch)', dataWidth:'7', dataHeight:'5' },
                     { text: '6X8(inch)', dataWidth:'8', dataHeight:'6' },
@@ -89,23 +117,23 @@
                 ],
             }
         },
-        mounted(){
-            this.initCropper();
-        },
+
         methods : {
             onFileChange(e){
                 const img = e.target.files[0];
                 this.url = URL.createObjectURL(img);
-                this.imgName = img.name;
             },
-            initCropper(){
-                let cropper = new Cropper(this.file, {
-                    viewMode: 1,
-                    aspectRatio: 16/9,
-                })
-                this.cropper = cropper
+            cropImage(){
+                this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                this.isCrop = true;
+                this.url = null;
+                this.percent = 50;
             },
-
+            cropImage2(){
+                this.cropImg2 = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                this.isCrop2 = false;
+                this.percent = 75;
+            },
             fnLeftBtn(){
                 //if (this.percent === 75) this.percent = 50;
             },
@@ -116,7 +144,7 @@
                 this.active_el = el;
                 this.isCrop = false;
                 this.isCrop2 = true;
-
+                this.aspectRatio = ratioWidth/ratioHeight;
                 let inchToMillimeters = 25.4;
                 ratioWidth = (ratioWidth * inchToMillimeters);
                 ratioHeight = (ratioHeight * inchToMillimeters);

@@ -8,13 +8,18 @@
                         <vue-cropper
                                 ref="cropper"
                                 :src="url"
-                                class="vue-cropper"
                                 :aspect-ratio = aspectRatio
+                                :viewMode = 1
+                                :autoCopArea = 1
+                                class="vue-cropper"
                                 alt="Source Image"
                         />
                     </div>
+                    <div v-if="url === ''">
+                        <img src="../assets/images/select_start.png" alt="">
+                    </div>
                     <div v-if="isCrop">
-                        <img :src="cropImg" alt="Cropped Image">
+                        <img :src="cropImg" alt="Cropped Image" ref="img-crop">
                     </div>
                     <div v-if="isCrop2">
                         <button type="button" class="crop__btn" @click.prevent="cropImage2">확인</button>
@@ -24,8 +29,8 @@
                                 :viewMode = 1
                                 :autoCopArea = 1
                                 :cropBoxResizable = false
-                                :container-width = 200
-                                :container-height = 500
+                                :minCropBoxWidth = ratioWidth
+                                :minCropBoxHeight = ratioHeight
                                 class="vue-cropper"
                                 ref="cropper2"
                                 alt="Source Image"
@@ -33,10 +38,21 @@
                     </div>
                     <div v-if="cropImg2">
                         <div class="frame-scale">
-                            <div class="frame">
-                                <div class="frame__border" v-if="frontSrc" v-bind:style="{ 'border-image-source': 'url(' + frontSrc + ')' }"></div>
-                                <div class="frame-image">
-                                    <img :src="cropImg2" alt="Cropped">
+                            <div class="frame"
+                                 :style="{
+                                     width: `${getFrameStyle.width}px`,
+                                     height: `${getFrameStyle.height}px`,
+                                    }">
+                                <div class="frame__border"
+                                     :style="{
+                                     borderImageSource: `url(${getFrontSrc}`,
+                                     borderImageSlice: frontPatternSize,
+                                     borderImageWidth: frameFrontWidth,
+                                     borderImageRepeat: 'initial',
+                                    }"
+                                ></div>
+                                <div class="frame-image" >
+                                    <img :src="cropImg2" alt="Cropped" ref="img-cropped">
                                 </div>
                             </div>
                         </div>
@@ -75,7 +91,9 @@
                             </div>
                             <div class="section__tab-step">
                                 <ul>
-                                  <li v-for="(size, index) in sizeList" :key="index" @click="activate(size.text, size.dataWidth, size.dataHeight)" :class="{ active : active_el == size.text }" >
+                                  <li v-for="(size, index) in sizeList" :key="index"
+                                      @click="activate(size.text, size.dataWidth, size.dataHeight)"
+                                      :class="{ active : active_el === size.text }" >
                                       <button type="button">{{ size.text }}</button>
                                   </li>
                                 </ul>
@@ -90,8 +108,12 @@
                         </div>
                         <div class="section__swiper-wrap">
                             <swiper :options="swiperOption" class="section__frame-list">
-                                <swiper-slide v-for="frame in frameList" :key="frame.src">
-                                    <img :src="getImgUrl(frame)" v-bind:alt="frame.name">
+                                <swiper-slide v-for="frame in frameList" :key="frame.src" >
+                                    <div @click="fnFrameChange(frame.idx, frame)"
+                                         :class="{ on : active_el === frame.idx }"
+                                    >
+                                        <img :src="getImgUrl(frame)" v-bind:alt="frame.name" >
+                                    </div>
                                 </swiper-slide>
                             </swiper>
                             <div class="swiper-button-prev" slot="button-prev"></div>
@@ -118,36 +140,82 @@
         components : {VueCropper, swiper, swiperSlide},
         data(){
             return{
-                url: null,
+                url: '',
                 cropImg: null,
                 cropImg2: null,
                 isCrop: false,
                 isCrop2: false,
+                isVertical: false,
                 color : '#ffffff',
                 percent : 0,
                 active_el: 0,
                 ratioWidth: 0,
                 ratioHeight: 0,
+                ratioInchWidth: 0,
+                ratioInchHeight: 0,
                 totalRatioSize : 0,
                 aspectRatio: 0,
-                frontSrc: null,
+                frontSrc: '',
+                frontPatternSize: 0,
+                frontWidth: 0,
+                frameFrontWidth: 0,
+                frameStyle: {
+                  width: 0,
+                  height: 0,
+                },
+                naturalSize:{
+                    width: 0,
+                    height:0
+                },
                 sizeList:[
                     { text: '5X7(inch)', dataWidth:'7', dataHeight:'5' },
                     { text: '6X8(inch)', dataWidth:'8', dataHeight:'6' },
-                    { text: '8X10(inch)', dataWidth:'10', dataHeight:'8' }
+                    { text: '8X10(inch)', dataWidth:'10', dataHeight:'8' },
+                    { text: 'A3', dataWidth:'16.535', dataHeight:'11.693' }
                 ],
                 frameList:[],
                 swiperOption: {
                     slidesPerView: 5,
                     spaceBetween: 10,
                     slidesPerColumn: 2,
-                }
+                },
+                setFrontSrc: null
             }
         },
-        mounted(){
-            this.getList();
+        computed:{
+            getFrontSrc() {
+                return this.frontSrc ? require(`@/assets/images/goods/${this.frontSrc}`) : ''
+            },
+            getFrameStyle() {
+                return this.frameStyle
+            },
+            getPercentCls(){
+                let nextCls = "";
+                switch (this.percent) {
+                    case 50:
+                        nextCls = 'next1';
+                        break;
+                    case 75:
+                        nextCls = 'next2';
+                        break;
+                }
+                return nextCls;
+            },
+            swiper() {
+                return this.$refs.mySwiper.swiper
+            }
         },
         methods : {
+            getFrameSize() {
+                const {clientWidth, clientHeight} = this.$refs['img-cropped'];
+
+                this.frameFrontWidth = Math.floor((this.frontWidth * 3.779) / (this.ratioInchWidth * 0.504) * 2);
+
+                let getFrontSize = (this.frameFrontWidth * 2);
+                this.frameStyle.width = clientWidth + getFrontSize;
+                this.frameStyle.height = clientHeight + getFrontSize;
+
+            },
             onFileChange(e){
                 const img = e.target.files[0];
                 this.url = URL.createObjectURL(img);
@@ -166,7 +234,7 @@
             getList(){
               this.$http.get('http://localhost:3000/goods')
                   .then((res)=>{
-                      //console.log('getList', res.data)
+                    //console.log('getList', res.data)
                     this.frameList = res.data;
                   });
             },
@@ -178,12 +246,6 @@
                     return require('../assets/images/logo.png');
                 }
             },
-            fnLeftBtn(){
-                //if (this.percent === 75) this.percent = 50;
-            },
-            fnRightBtn(){
-                //if (this.percent === 50) this.percent = 75;
-            },
             activate(el, ratioWidth, ratioHeight){
                 this.active_el = el;
                 this.isCrop = false;
@@ -191,33 +253,32 @@
                 this.aspectRatio = ratioWidth / ratioHeight;
 
                 let inchToMillimeters = 25.4;
-                ratioWidth = (ratioWidth * inchToMillimeters);
-                ratioHeight = (ratioHeight * inchToMillimeters);
+                this.ratioInchWidth = ratioWidth;
+                this.ratioInchHeight = ratioHeight;
 
-                this.ratioWidth = ratioWidth;
-                this.ratioHeight = ratioHeight;
+                this.ratioWidth = (ratioWidth * inchToMillimeters);
+                this.ratioHeight = (ratioHeight * inchToMillimeters);
 
             },
-            fnFrameChange(frame){
-                console.log(frame);
+            fnFrameChange(el, frame){
+                const currentImageName = `${frame.src}`;
+                this.active_el = el;
+                this.frontSrc = currentImageName;
+                this.frontPatternSize = frame.patternSize;
+                this.frontWidth = frame.frontSize;
+                this.getFrameSize();
             },
-        },
-        computed:{
-            getPercentCls(){
-                let nextCls = "";
-                switch (this.percent) {
-                    case 50:
-                        nextCls = 'next1';
-                        break;
-                    case 75:
-                        nextCls = 'next2';
-                        break;
+            fnLeftBtn(){
+                //if (this.percent === 75) this.percent = 50;
+            },
+            fnRightBtn(){
+                if (this.percent === 50){
+                    if(this.ratioWidth === 0) alert("사이즈를 선택해 주세요")
                 }
-                return nextCls;
-            },
-            swiper() {
-                return this.$refs.mySwiper.swiper
             }
+        },
+        mounted(){
+            this.getList();
         }
     }
 

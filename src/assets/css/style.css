@@ -46,7 +46,10 @@ header>h1>a{
     padding: 15px 25px;
     border-radius: 25px;
 }
-
+.show__video-btn{
+    display: block;
+    margin: 15px auto 0;
+}
 #app{height: 100%;overflow: hidden}
 .section__container{height:100%;}
 .section__container>div{display: inline-block;height: 100%;vertical-align: top;position:relative}
@@ -61,6 +64,7 @@ header>h1>a{
     background-blend-mode: multiply;
 }
 .section__container .section__container-left .section__image-area{width:450px;position:absolute;top:50%;left:50%;transform: translate(-50%,-50%);}
+.section__container .section__container-left .section__image-area>div{width: 100%;height: 100%;position:relative}
 .section__container .section__container-left .crop__btn{
     cursor: pointer;
     position: absolute;
@@ -297,8 +301,19 @@ header>h1>a{
     background-color: #efe7e7;
     cursor: pointer;
 }
-.section__frame-list .swiper-slide span{display: block;width: 100%;padding-top: 100%;height: 0;background-repeat: no-repeat;background-position: center;}
-.section__frame-list .swiper-slide img{
+.section__frame-list .swiper-slide>div{position:relative;}
+.section__frame-list .swiper-slide>div.on::after{
+    content:"";
+    display: block;
+    position:absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background: url("../images/check-icon.png") rgba(0,0,0,.5) no-repeat center center/40px;
+}
+.section__frame-list .swiper-slide>div span{display: block;width: 100%;padding-top: 100%;height: 0;background-repeat: no-repeat;background-position: center;}
+.section__frame-list .swiper-slide>div img{
     transform: scale(3) translate(45%, 45%);
 }
 .frame-scale{
@@ -319,7 +334,7 @@ header>h1>a{
 }
 .frame-image{
     box-sizing: content-box;
-    min-width: 224px;
+    min-width: 450px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -329,7 +344,7 @@ header>h1>a{
     /* -webkit-transform: translate(-50%, -50%) translateZ(0) scale(1.0, 1.0); */
 }
 .frame__border{
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 100%;
     border: 2px solid black;

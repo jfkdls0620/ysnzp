@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Main from '../components/Main'
 import SelectPicture from '../components/SelectPicture'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 export const router = new VueRouter({
     mode: 'history',

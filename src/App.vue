@@ -3,7 +3,9 @@
     <header>
       <h1><router-link to="/">main</router-link></h1>
     </header>
-    <router-view></router-view>
+    <transition name="page" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -13,6 +15,3 @@ export default {
 }
 </script>
 
-<style>
-
-</style>

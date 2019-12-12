@@ -1,16 +1,16 @@
 <template>
     <div id="select__picture" class="container">
         <section class="section__container">
-            <div class="section__container-left" v-bind:style="{ backgroundColor: color }">
+            <div class="section__container-left" v-bind:style="{ backgroundColor: getBgColor }">
                 <div class="section__image-area" id="preview" >
                     <div v-if="url">
                         <button type="button" class="crop__btn" @click.prevent="cropImage">자르기</button>
                         <vue-cropper
                                 ref="cropper"
                                 :src="url"
-                                :aspect-ratio = aspectRatio
-                                :viewMode = 1
+                                :viewMode = 3
                                 :autoCopArea = 1
+                                :zoomOnWheel = false
                                 class="vue-cropper"
                                 alt="Source Image"
                         />
@@ -29,10 +29,10 @@
                                 :viewMode = 1
                                 :autoCopArea = 1
                                 :cropBoxResizable = false
-                                :minCropBoxWidth = ratioWidth
-                                :minCropBoxHeight = ratioHeight
+                                :center = true
+                                :zoomOnWheel = false
                                 class="vue-cropper"
-                                ref="cropper2"
+                                ref="cropperSize"
                                 alt="Source Image"
                                 />
                     </div>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="section__background">
-                    <input type="color" id="background__color" v-model="color">
+                    <input type="color" id="background__color" v-model="getBgColor">
                     <label for="background__color">배경컬러 바꾸기</label>
                 </div>
             </div>
@@ -73,8 +73,13 @@
                 </div>
                 <div class="section__slide-wrap">
                     <div class="section__slide">
+                        <div class="section_title-box">
+                            <h1>사진 선택하기</h1>
+                            <p>PC에서 사진을 선택해 주세요.</p>
+                            <p>가장 적합한 인쇄 사이즈를 추천드립니다.</p>
+                        </div>
                         <div class="upload__btn">
-                            <input type="file" id="input-upload" @change="onFileChange" />
+                            <input type="file" id="input-upload" @change="onFileChange" ref="file"/>
                             <label for="input-upload">내 PC에서 불러오기</label>
                         </div>
                     </div>
@@ -146,7 +151,7 @@
                 isCrop: false,
                 isCrop2: false,
                 isVertical: false,
-                color : '#ffffff',
+                getBgColor : '#f1f1f1',
                 percent : 0,
                 active_el: 0,
                 ratioWidth: 0,
@@ -162,10 +167,6 @@
                 frameStyle: {
                   width: 0,
                   height: 0,
-                },
-                naturalSize:{
-                    width: 0,
-                    height:0
                 },
                 sizeList:[
                     { text: '5X7(inch)', dataWidth:'7', dataHeight:'5' },
@@ -216,9 +217,10 @@
                 this.frameStyle.height = clientHeight + getFrontSize;
 
             },
-            onFileChange(e){
-                const img = e.target.files[0];
+            onFileChange(){
+                const img = this.$refs.file.files[0];
                 this.url = URL.createObjectURL(img);
+                console.dir()
             },
             cropImage(){
                 this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
@@ -227,7 +229,7 @@
                 this.percent = 50;
             },
             cropImage2(){
-                this.cropImg2 = this.$refs.cropper2.getCroppedCanvas().toDataURL();
+                this.cropImg2 = this.$refs.cropperSize.getCroppedCanvas().toDataURL();
                 this.isCrop2 = false;
                 this.percent = 75;
             },
@@ -258,7 +260,10 @@
 
                 this.ratioWidth = (ratioWidth * inchToMillimeters);
                 this.ratioHeight = (ratioHeight * inchToMillimeters);
-
+                // this.$refs.cropperSize.setCropBoxData({
+                //     "width": this.ratioWidth,
+                //     "height": this.ratioHeight
+                // })
             },
             fnFrameChange(el, frame){
                 const currentImageName = `${frame.src}`;

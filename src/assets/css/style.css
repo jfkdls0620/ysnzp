@@ -359,3 +359,12 @@ header>h1>a{
     z-index: 999;
     overflow: hidden;
 }
+
+/* 트랜지션 모션 쳐리 (라우터 이동) */
+.page-enter-active, .page-leave-active {
+    transition: opacity .8s, transform .8s;
+}
+.page-enter, .page-leave-to {
+    opacity: 0;
+    transform: translateX(-30%);
+}

@@ -132,7 +132,6 @@ export default {
         speed:800,
           on: {
               slideChange: function () {
-
               },
           }
       },

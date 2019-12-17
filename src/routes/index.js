@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '../components/Main'
-import SelectPicture from '../components/SelectPicture'
+import Company from '../components/Company'
+import Portfolio from '../components/Portfolio'
 
 Vue.use(VueRouter);
 
@@ -13,8 +14,12 @@ export const router = new VueRouter({
             component: Main
         },
         {
-            path: '/SelectPicture',
-            component: SelectPicture
+            path: '/Company',
+            component: Company
+        },
+        {
+            path: '/Portfolio',
+            component: Portfolio
         }
     ]
 })

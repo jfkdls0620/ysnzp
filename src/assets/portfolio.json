@@ -1,23 +1,32 @@
 {
   "items": [
     {
-      "idx": 1,
       "src": "dummy-04.jpg",
       "title": "Asia\nArtist\nAwards",
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc lacinia sem porttitor tellus malesuada .",
       "date": "2019.07"
     },
     {
-      "idx": 2,
       "src": "dummy-05.jpg",
       "title": "Waplace",
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc lacinia sem porttitor tellus malesuada .",
       "date": "2019.07"
     },
     {
-      "idx": 3,
       "src": "dummy-04.jpg",
-      "title": "Sleepy\nTrunk",
+      "title": "Asia\nArtist\nAwards",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc lacinia sem porttitor tellus malesuada .",
+      "date": "2019.07"
+    },
+    {
+      "src": "dummy-05.jpg",
+      "title": "test",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc lacinia sem porttitor tellus malesuada .",
+      "date": "2019.07"
+    },
+    {
+      "src": "dummy-04.jpg",
+      "title": "ttes\nttet",
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc lacinia sem porttitor tellus malesuada .",
       "date": "2019.07"
     }

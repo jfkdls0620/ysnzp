@@ -1,14 +1,14 @@
 @import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css);
 @import url(base.css);
 @import url(main.css);
+@import url(sub.css);
 
 /* 트랜지션 모션 쳐리 (라우터 이동) */
 .page-enter-active, .page-leave-active {
-    transition: opacity .8s, transform .8s;
+    transition: opacity .3s, transform .3s;
 }
 .page-enter, .page-leave-to {
     opacity: 0;
-    transform: translateX(30%);
 }
 body{
     overflow: hidden;
@@ -19,19 +19,6 @@ body{
     height: 100%;
     overflow: hidden;
 }
-.container{
-    position: absolute;
-    width:100%;
-    vertical-align: top;
-    top:0;
-    left:80px;
-    height: 100%;
-    transition : all .85s;
-}
-#app.active .container{
-    left: 580px;
-}
-
 header{
     position:fixed;
     top:0;
@@ -39,6 +26,21 @@ header{
     height: 100%;
     z-index: 99;
 }
+.container{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left:0;
+    transition : all .85s;
+    padding-left: 80px;
+    z-index: 1;
+}
+#app.active .container{
+    padding-left: 580px;
+}
+
+
 header .header-inner{
     position:relative;
     width: 80px;
@@ -97,12 +99,28 @@ header .section__menu{
     display: inline-block;
     height: 100%;
     vertical-align: top;
+    position:relative;
     background-color:#181818;
     overflow: hidden;
     background-position: right -340px bottom 20%;
     background-repeat: no-repeat;
     background-size:auto 496px;
     z-index: 99;
+}
+.section_bg{
+    width: 100%;
+    height: 100%;
+    position:absolute;
+    top:0;
+    right:0;
+    z-index: -1;
+    opacity: 0;
+    background-color: rgba(0,0,0,.6);
+    transition: all .8s;
+}
+#app.active .section_bg{
+    z-index: 98;
+    opacity: 1;
 }
 header .section__menu ul{
     padding-top: 80px;
@@ -120,6 +138,23 @@ header .section__menu ul li a{
     font-weight: 400;
     color: #fff;
 }
+header .section__menu ul.sub-list{
+    position:absolute;
+    padding: 0;
+    left:50px;
+    bottom:80px;
+}
+header .section__menu ul.sub-list li{
+    padding-bottom: 16px;
+}
+header .section__menu ul.sub-list li:last-child{
+    padding-bottom: 0;
+}
+header .section__menu ul.sub-list li a{
+    font-size:18px;
+    line-height: 27px;
+}
+
 #app.active header .section__menu{
     width:500px;
     background-image: url("../images/menu_bg.png");
@@ -261,5 +296,121 @@ header .header-inner .menu-trigger span:nth-of-type(3) {
     }
     100% {
         transform : translateY(-7px) rotate(-45deg);
+    }
+}
+
+@media only screen and (min-width : 0px) and (max-width : 1280px) {
+
+}
+
+@media only screen and (min-width : 0px) and (max-width : 799px) {
+    #app{
+        width: 100%;
+    }
+    /* 트랜지션 모션 쳐리 (라우터 이동) */
+    .page-enter-active, .page-leave-active {
+        transition: opacity .8s, transform .8s;
+    }
+    .page-enter, .page-leave-to {
+        opacity: 0;
+    }
+    header{
+        width: 100%;
+        z-index: 1;
+    }
+    header .header-inner{
+        width:100%;
+        height:56px;
+        border-right:0;
+        border-bottom:1px solid #c2c2c2;
+    }
+    header .header-inner h1 {
+        width:80px;
+        height: 100%;
+        bottom:0;
+        overflow: hidden;
+    }
+    header .header-inner h1 a {
+        transform: rotate(90deg);
+        background-size:auto 55px;
+    }
+    header .header-inner .menu-trigger{
+        position:absolute;
+        top:0;
+        right:0;
+        width: 56px;
+        height: 56px;
+    }
+    header .header-inner .menu-trigger>div{
+        margin: 18px auto 0;
+    }
+    header .section__menu{
+        width: 100%;
+        height: calc(100% - 56px);
+        position:absolute;
+        top:56px;
+        left:0;
+        z-index: -1;
+        opacity: 0;
+        background-size:auto 363px;
+        background-position: right -247px bottom 40%;
+    }
+    header .section__menu>div{
+        width: 100%;
+        height: 100%;
+        position:relative;
+    }
+    header .section__menu ul{
+        padding:25px 0 0 32px;
+    }
+    header .section__menu ul li{
+        padding-bottom: 12px;
+    }
+    header .section__menu ul li a{
+        font-size:18px;
+        line-height: 27px;
+    }
+    header .section__menu ul.sub-list{
+        left:32px;
+        bottom:50px;
+    }
+    header .section__menu ul.sub-list li{
+        padding-bottom: 12px;
+    }
+    .section_bg{
+        display: none;
+    }
+    #app.active .section_bg{
+        display: none;
+    }
+    #app.active .container{
+        z-index: -1;
+        opacity: 0;
+    }
+    .container {
+        position: absolute;
+        padding-left:0;
+        opacity: 1;
+        top:56px;
+        height: calc(100% - 56px);
+        padding-top:0;
+        z-index: 1;
+    }
+    #app.active header{
+        z-index:999;
+    }
+
+    #app.active header .section__menu{
+        width: 100%;
+        z-index: 99;
+        opacity: 1;
+        left:0;
+    }
+
+    #app.active header .header-inner{
+        border-right:0;
+    }
+    #app.active .container{
+        padding-left: 0;
     }
 }

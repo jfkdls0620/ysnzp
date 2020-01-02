@@ -1,45 +1,28 @@
 <template>
   <div class="container">
     <div class="section__swiper-wrap">
-      <swiper :options="swiperOption" class="section__main">
+      <swiper :options="swiperOption" class="section__main" ref="Swiper">
         <swiper-slide class="section__title">
             <div class="section__step01">
                 <h2>HARDWARE<br>WEARS<br>SOFTWARE</h2>
                 <p>하드웨어와 소프트웨어<br>모든 면에서 탁월한 용산집</p>
                 <router-link to="/Company"><span>용산집 알아보기</span></router-link>
+                <div class="scroll-area mobile">
+                    <span>SCROLL</span>
+                </div>
             </div>
             <div class="scroll-area">
                 <span>SCROLL</span>
             </div>
         </swiper-slide>
-        <swiper-slide class="section__portfolio">
+        <swiper-slide v-for="(item, index) in getPortfolio.slice(0, 3)" :key="index" class="section__portfolio">
           <div class="section__portfolio-step">
               <dl>
-                <dt><span>PORTFOLIO #1</span></dt>
-                <dd>Asia<br>Artist<br>Awards</dd>
+                  <dt><span>PORTFOLIO #{{index + 1}}</span></dt>
+                  <dd>{{item.title}}</dd>
               </dl>
-              <router-link to="/Portfolio">LEARN MORE</router-link>
-            <div class="bg01"></div>
-          </div>
-        </swiper-slide>
-        <swiper-slide class="section__portfolio">
-          <div class="section__portfolio-step">
-            <dl>
-              <dt><span>PORTFOLIO #2</span></dt>
-              <dd>Waplace</dd>
-            </dl>
-            <router-link to="/Portfolio">LEARN MORE</router-link>
-            <div class="bg02"></div>
-          </div>
-        </swiper-slide>
-        <swiper-slide class="section__portfolio">
-          <div class="section__portfolio-step">
-            <dl>
-              <dt><span>PORTFOLIO #1</span></dt>
-              <dd>Sleepy<br>Trunk</dd>
-            </dl>
-            <router-link to="/Portfolio">LEARN MORE</router-link>
-            <div class="bg01"></div>
+              <router-link to="/Portfolio" class="learn-btn">LEARN MORE</router-link>
+              <div :style="{backgroundImage: `url(${getImgUrl(item)}`}"></div>
           </div>
         </swiper-slide>
         <swiper-slide class="section__service">
@@ -73,7 +56,7 @@
                 </dd>
               </dl>
             </div>
-            <div class="img-box">
+            <div class="img-box mt">
               <img src="../assets/images/port/dummy-05.jpg" alt="" style="width: 65%;">
             </div>
           </div>
@@ -99,12 +82,33 @@
         <swiper-slide class="section__show">
             <div class="section__show-wrap">
                 <div>
-                    1
+                    <div class="section__show-box">
+                        <dl>
+                            <dt>프로세스 소개</dt>
+                            <dd>일반적인 에이전시의 의뢰 검토와 다릅니다.<br>
+                                용산집은 고객의 예산과 현황, 요구사항을 종합적으로<br>
+                                검토하여 전문 기능 정의서 수준의 RFP(제안 의뢰서)<br>
+                                를 계약 전에 작성합니다.</dd>
+                        </dl>
+                        <router-link to="/" class="learn-btn">SHOW PROCESS</router-link>
+                    </div>
                 </div>
                 <div>
-                    2
+                    <div class="section__show-box">
+                        <dl>
+                            <dt>클라이언트를 위한<br>가이드 제공</dt>
+                            <dd>프로세스가 생소하시다구요?<br>
+                                커뮤니케이션을 위한 교육도 마다하지 않습니다.<br>
+                                클라이언트들이 자주 하는 질문들을 모았습니다.</dd>
+                        </dl>
+                        <router-link to="/" class="learn-btn">SHOW GUIDELINE</router-link>
+                    </div>
                 </div>
             </div>
+        </swiper-slide>
+        <swiper-slide class="section__footer">
+            <main-footer/>
+            <div class="turn__btn" @click="goToFirst"><span>TURN BACK</span></div>
         </swiper-slide>
       </swiper>
     </div>
@@ -112,41 +116,37 @@
 </template>
 
 <script>
-
-import {swiper, swiperSlide} from 'vue-awesome-swiper'
-import 'swiper/dist/css/swiper.css'
+import mainFooter from '../components/footer'
+import portfolio from "../assets/portfolio"
+import SwiperMixin from '../slideSwiper'
 
 export default {
-  name: 'Main',
-  components: {swiper, swiperSlide},
-  data(){
-    return{
-      portfolioData:[],
-      swiperOption: {
-        slidesPerView:'auto',
-        slidesPerGroup: 1,
-        direction: 'horizontal',
-        spaceBetween: 0,
-        mousewheel: true,
-        parallax: true,
-        speed:800,
-          on: {
-              slideChange: function () {
-              },
-          }
-      },
-    }
-  },
-  methods :{
-    getImgUrl(frame) {
-      try {
-        const currentImageName = `${frame.src}`;
-        return require('../assets/images/port/' + currentImageName);
-      } catch{
-        return require('../assets/logo.png');
-      }
+    mixins: [ SwiperMixin ],
+    name: 'Main',
+    components: {
+        'main-footer': mainFooter
     },
-  },
+    data() {
+        return {
+        }
+    },
+    computed: {
+        getPortfolio(){
+            return portfolio.items.map((item) => {
+                return item;
+            })
+        }
+    },
+    methods: {
+        getImgUrl(frame) {
+            try {
+                const currentImageName = `${frame.src}`;
+                return require('../assets/images/port/' + currentImageName);
+            } catch {
+                return require('../assets/logo.png');
+            }
+        }
+    }
 }
 
 </script>

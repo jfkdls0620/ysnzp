@@ -144,7 +144,7 @@ export default {
     },
     methods: {
         sendPost(){
-            this.$http.post('http//api.commeister.com/api/project_request',{
+            this.$http.post('/api/project_request',{
                 name: this.name,
                 position: this.position,
                 company: this.company,

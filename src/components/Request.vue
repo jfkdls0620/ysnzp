@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <form style="height: 100%" @submit.prevent="sendPost">
         <div class="section__swiper-wrap sub-wrap">
             <swiper :options="swiperOption" ref="Swiper">
                 <swiper-slide class="section__title">
@@ -17,27 +18,27 @@
                             <h4>우리에게 누구인지 알려주세요</h4>
                             <div class="input-box">
                                 <label for="input_name">이름</label>
-                                <input type="text" id="input_name" placeholder="Name">
+                                <input type="text" id="input_name" placeholder="Name" v-model="data.name">
                             </div>
                             <div class="input-box">
                                 <label for="input_position">직책</label>
-                                <input type="text" id="input_position" placeholder="Position">
+                                <input type="text" id="input_position" placeholder="Position" v-model="data.position">
                             </div>
                             <div class="input-box">
                                 <label for="input_company">기관 혹은 기업</label>
-                                <input type="text" id="input_company" placeholder="Company">
+                                <input type="text" id="input_company" placeholder="Company" v-model="data.company">
                             </div>
                             <div class="input-box">
                                 <label for="input_email">이메일</label>
-                                <input type="text" id="input_email" placeholder="Email">
+                                <input type="text" id="input_email" placeholder="Email" v-model="data.email">
                             </div>
                             <div class="input-box">
                                 <label for="input_number">전화번호</label>
-                                <input type="number" id="input_number" placeholder="Phone Number">
+                                <input type="number" id="input_number" placeholder="Phone Number" v-model="data.phone">
                             </div>
                             <div class="input-box">
                                 <label for="input_site">사이트 주소(선택)</label>
-                                <input type="text" id="input_site" placeholder="Web Site">
+                                <input type="text" id="input_site" placeholder="Web Site" v-model="data.siteName">
                             </div>
                         </div>
                     </div>
@@ -74,16 +75,23 @@
                             <div class="input-box">
                                 <label for="input_pay">예산</label>
                                 <select name="" id="input_pay">
-                                    <option v-for="payItem in data.pay" :key="payItem.value" :value="payItem.value">{{payItem.title}}</option>
+                                    <option v-for="payItem in items.pay" :key="payItem.value" :value="payItem.value">{{payItem.title}}</option>
                                 </select>
                             </div>
                             <div class="input-box">
                                 <label for="input_day">일정</label>
                                 <select name="" id="input_day">
-                                    <option v-for="dayItem in data.day" :key="dayItem.value" :value="dayItem.value">{{dayItem.title}}</option>
+                                    <option v-for="dayItem in items.day" :key="dayItem.value" :value="dayItem.value">{{dayItem.title}}</option>
                                 </select>
                             </div>
                         </div>
+                    </div>
+                </swiper-slide>
+                <swiper-slide class="section__request">
+                    <div class="input-wrap">
+                        <h4>어떻게 도와드리면 될까요?</h4>
+                        <textarea name="" id="" cols="30" rows="10"></textarea>
+                        <button type="submit">의뢰하기</button>
                     </div>
                 </swiper-slide>
                 <swiper-slide class="section__footer">
@@ -92,9 +100,9 @@
                 </swiper-slide>
             </swiper>
         </div>
+        </form>
     </div>
 </template>
-
 
 <script>
 import mainFooter from '../components/footer'
@@ -109,6 +117,14 @@ export default {
     data() {
         return {
             data:{
+                name:'',
+                position:'',
+                company:'',
+                email:'',
+                phone:'',
+                siteName:'',
+            },
+            items:{
                 pay:[
                     {title : '예산을 선택하세요' , value : 0},
                     {title : '500이하' , value : 500},
@@ -120,13 +136,28 @@ export default {
                     {title : '60일' , value : 60},
                 ]
             }
+
         }
     },
     computed: {
 
     },
     methods: {
-
+        sendPost(){
+            this.$http.post('http//api.commeister.com/api/project_request',{
+                name: this.name,
+                position: this.position,
+                company: this.company,
+                email: this.email,
+                phone: this.phone,
+                siteName:this.siteName,
+            })
+                .then(function(res) {
+                    console.log(res.data)
+                }, function() {
+                    console.log('failed')
+                })
+        }
     }
 }
 </script>

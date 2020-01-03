@@ -144,7 +144,14 @@ export default {
     },
     methods: {
         sendPost(){
-            this.$http.post('/api/project_request',{
+            this.$http.post('http://api.commeister.com/api/project_request',{
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST, GET, PUT, OPTIONS, DELETE',
+                    'Access-Control-Allow-Headers': 'Access-Control-Allow-Methods, Access-Control-Allow-Origin, Origin, Accept, Content-Type',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 name: this.name,
                 position: this.position,
                 company: this.company,
@@ -153,7 +160,7 @@ export default {
                 siteName:this.siteName,
             })
                 .then(function(res) {
-                    console.log(res.data)
+                    console.log(res)
                 }, function() {
                     console.log('failed')
                 })

@@ -1,9 +1,9 @@
+const fix_url = 'http://api.commeister.com';
 module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                // target: 'http://api.commeister.com',
-                target: 'http://api.commeister.com',
+                target: fix_url + '/api',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''

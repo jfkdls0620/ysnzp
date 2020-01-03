@@ -107,6 +107,7 @@
 <script>
 import mainFooter from '../components/footer'
 import SwiperMixin from '../slideSwiper'
+import {request} from '@/api'
 
 export default {
     mixins: [ SwiperMixin ],
@@ -144,26 +145,14 @@ export default {
     },
     methods: {
         sendPost(){
-            this.$http.post('http://api.commeister.com/api/project_request',{
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST, GET, PUT, OPTIONS, DELETE',
-                    'Access-Control-Allow-Headers': 'Access-Control-Allow-Methods, Access-Control-Allow-Origin, Origin, Accept, Content-Type',
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                name: this.name,
-                position: this.position,
-                company: this.company,
-                email: this.email,
-                phone: this.phone,
-                siteName:this.siteName,
-            })
-                .then(function(res) {
+
+            const postData = new FormData();
+            request.send(postData)
+                .then(res => {
                     console.log(res)
-                }, function() {
-                    console.log('failed')
-                })
+                }).catch(err => {
+                console.error(err);
+            });
         }
     }
 }

@@ -144,7 +144,7 @@ export default {
     },
     methods: {
         sendPost(){
-            this.$http.post('/api/api/project_request',{
+            this.$http.post('http://api.commeister.com/api/project_request',{
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'POST, GET, PUT, OPTIONS, DELETE',
